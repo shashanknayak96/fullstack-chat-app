@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "localhost:5001"
+        REGISTRY = "192.168.1.100:5001"
         IMAGE = "chatapp-backend"
         TAG = "${BUILD_NUMBER}"
     }
@@ -15,13 +15,21 @@ pipeline {
             }
         }
 
-        stage('Build Docker') {
+        stage('Checkout') {
             steps {
-                sh 'docker build -t localhost:5000/my-app:test .'
+                checkout scm
             }
         }
 
-        stage('Push Docker') {
+        stage('Build Docker') {
+            steps {
+                sh '''
+                docker build -t $REGISTRY/$IMAGE:$TAG .
+                '''
+            }
+        }
+
+       stage('Push Image') {
             steps {
                 sh '''
                 docker push $REGISTRY/$IMAGE:$TAG
@@ -29,12 +37,18 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy to Kubernetes') {
             steps {
                 sh '''
-                kubectl set image deployment/my-app \
-                my-app=$REGISTRY/$IMAGE:$TAG
+                kubectl set image deployment/chatapp \
+                chatapp=$REGISTRY/$IMAGE:$TAG
                 '''
+            }
+        }
+
+        stage('Verify Rollout') {
+            steps {
+                sh 'kubectl rollout status deployment/chatapp'
             }
         }
     }
