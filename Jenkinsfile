@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "192.168.1.100:5001"
+        REGISTRY = "192.168.177.96:5001"
         IMAGE = "chatapp-backend"
         TAG = "${BUILD_NUMBER}"
     }
