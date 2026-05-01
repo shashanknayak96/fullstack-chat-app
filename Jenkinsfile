@@ -24,6 +24,7 @@ pipeline {
         stage('Build Docker') {
             steps {
                 sh '''
+                cd backend
                 docker build -t $REGISTRY/$IMAGE:$TAG .
                 '''
             }
