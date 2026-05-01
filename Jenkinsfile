@@ -15,13 +15,7 @@ pipeline {
             }
         }
 
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        stage('Build Docker') {
+        stage('Build Docker Image') {
             steps {
                 sh '''
                 docker build -t $REGISTRY/$IMAGE:$TAG ./backend
