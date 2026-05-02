@@ -19,6 +19,7 @@ pipeline {
             steps {
                 sh '''
                 docker build -t $REGISTRY/$IMAGE:$TAG ./backend
+                docker build -t $REGISTRY/$IMAGE:latest ./backend
                 '''
             }
         }
@@ -27,6 +28,7 @@ pipeline {
             steps {
                 sh '''
                 docker push $REGISTRY/$IMAGE:$TAG
+                docker push $REGISTRY/$IMAGE:latest
                 '''
             }
         }
