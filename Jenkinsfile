@@ -36,15 +36,15 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 sh '''
-                kubectl set image deployment/chatapp \
-                chatapp=$REGISTRY/$IMAGE:$TAG
+                kubectl set image deployment/backend-deployment \
+                chatapp-backend=$REGISTRY/$IMAGE:$TAG
                 '''
             }
         }
 
         stage('Verify Rollout') {
             steps {
-                sh 'kubectl rollout status deployment/chatapp'
+                sh 'kubectl rollout status backend-deployment'
             }
         }
     }
