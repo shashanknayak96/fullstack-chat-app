@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = "kind-registry:5001"
+        REGISTRY = "kind-registry:5000"
         IMAGE = "chatapp-backend"
         TAG = "${BUILD_NUMBER}"
     }
