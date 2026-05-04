@@ -37,14 +37,14 @@ pipeline {
             steps {
                 sh '''
                 kubectl set image deployment/backend-deployment \
-                chatapp-backend=$REGISTRY/$IMAGE:$TAG
+                chatapp-backend=localhost:5001/$IMAGE:$TAG
                 '''
             }
         }
 
         stage('Verify Rollout') {
             steps {
-                sh 'kubectl rollout status backend-deployment'
+                sh 'kubectl rollout status deployment/backend-deployment'
             }
         }
     }
