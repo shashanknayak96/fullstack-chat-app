@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    environment {
+        REGISTRY = "172.20.0.3:5000"
+        IMAGE = "chatapp-frontend"
+        TAG = "${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Build Frontend Docker Image') {
+            steps {
+                sh '''
+                docker build -t $REGISTRY/$IMAGE:$TAG ./frontend
+                docker build -t $REGISTRY/$IMAGE:latest ./frontend
+                '''
+            }
+        }
+
+       stage('Push Image') {
+            steps {
+                sh '''
+                docker push $REGISTRY/$IMAGE:$TAG
+                docker push $REGISTRY/$IMAGE:latest
+                '''
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                kubectl set image deployment/frontend-deployment \
+                chatapp-frontend=localhost:5001/$IMAGE:$TAG
+                '''
+            }
+        }
+
+        stage('Verify Rollout') {
+            steps {
+                sh 'kubectl rollout status deployment/frontend-deployment'
+            }
+        }
+    }
+}
