@@ -1,42 +1,55 @@
-# ✨ Full Stack Realtime Chat App ✨
 
-![Demo App](/frontend/public/screenshot-for-readme.png)
 
-[Video Tutorial on Youtube](https://youtu.be/ntKkVrQqBYY)
 
-Highlights:
+# Full-Stack Chat Application
 
-- 🌟 Tech stack: MERN + Socket.io + TailwindCSS + Daisy UI
-- 🎃 Authentication && Authorization with JWT
-- 👾 Real-time messaging with Socket.io
-- 🚀 Online user status
-- 👌 Global state management with Zustand
-- 🐞 Error handling both on the server and on the client
-- ⭐ At the end Deployment like a pro for FREE!
-- ⏳ And much more!
+This project is a full-stack chat application featuring a React-based frontend and a Node.js backend, enhanced with Kubernetes deployment and local CI/CD using Jenkins.
 
-### Setup .env file
+## Features
 
-```js
-MONGODB_URI=...
-PORT=5001
-JWT_SECRET=...
+- Real-time messaging
+- User authentication
+- Responsive UI with Tailwind CSS
+- Cloudinary integration for media uploads
+- Socket.io for real-time communication
 
-CLOUDINARY_CLOUD_NAME=...
-CLOUDINARY_API_KEY=...
-CLOUDINARY_API_SECRET=...
+## Deployment and CI/CD
 
-NODE_ENV=development
+- **Kubernetes Integration**: The application is containerized and deployed on a local Kubernetes cluster using Kind.
+
+- **Jenkins CI/CD**: Jenkins runs locally in a Docker container. Upon pushing code to GitHub, Jenkins automatically:
+  - Pulls the latest code from GitHub.
+  - Builds Docker images locally.
+  - Pushes images to a local registry (registry2).
+  - Deploys the updated application to the Kubernetes cluster.
+
+### Setting up Jenkins Locally
+
+To run Jenkins locally, execute the following Docker command:
+
+```bash
+docker run -d \
+  --name jenkins \
+  --restart=unless-stopped \
+  -p 8080:8080 -p 50000:50000 \
+  -v jenkins_home:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v $HOME/.kube:/root/.kube \
+  --network kind \
+  jenkins/jenkins:lts
 ```
 
-### Build the app
+## Project Structure
 
-```shell
-npm run build
-```
+- `backend/`: Node.js server with Express, MongoDB, and Socket.io
+- `frontend/`: React application with Vite
+- `k8s/`: Kubernetes manifests for deployment
+- `Jenkinsfile`: Jenkins pipeline configuration
 
-### Start the app
+## Getting Started
 
-```shell
-npm start
-```
+1. Clone the repository
+2. Set up the local Kubernetes cluster with Kind (see `kindConfig.sh`)
+3. Deploy MongoDB and other services using the Kubernetes manifests
+4. Run the Jenkins setup as above
+5. Push changes to GitHub to trigger the CI/CD pipeline
